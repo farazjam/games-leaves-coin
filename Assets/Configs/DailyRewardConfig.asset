@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f258090beed0d874bb9dfd4d111f61f3, type: 3}
+  m_Name: DailyRewardConfig
+  m_EditorClassIdentifier: 
+  currencyArgDailyRewardsList:
+  - Type: 0
+    Amount: 1
+    Icon: Generic_Coin_Icon
+    ResetHourUTC24: 13
+    LastClaim: 
+    NextClaim: 
+  - Type: 1
+    Amount: 2
+    Icon: Generic_Gem_Icon
+    ResetHourUTC24: 0
+    LastClaim: 
+    NextClaim: 
+  - Type: 2
+    Amount: 3
+    Icon: Generic_TournamentTicket
+    ResetHourUTC24: 0
+    LastClaim: 
+    NextClaim: 
