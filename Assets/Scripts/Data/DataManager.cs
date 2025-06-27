@@ -40,12 +40,16 @@ public class DataManager : LoadableManager<DataManager>
     {
         EventBus.Shop.OnDailyRewardRequested += DailyRewardRequested;
         EventBus.Shop.OnCurrencySpendRequested += CurrencySpendRequested;
+        EventBus.Shop.WheelOfFortune.OnSpinRequested += WheelOfFortuneSpinRequested;
+        EventBus.Shop.WheelOfFortune.OnSpinCompleted += WheelOfFortuneSpinCompleted;
     }
 
     private void OnDisable()
     {
         EventBus.Shop.OnDailyRewardRequested -= DailyRewardRequested;
         EventBus.Shop.OnCurrencySpendRequested -= CurrencySpendRequested;
+        EventBus.Shop.WheelOfFortune.OnSpinRequested -= WheelOfFortuneSpinRequested;
+        EventBus.Shop.WheelOfFortune.OnSpinCompleted -= WheelOfFortuneSpinCompleted;
     }
 
     public CurrencyArg GetCurrencyArg(CurrencyType currencyType)
@@ -112,4 +116,64 @@ public class DataManager : LoadableManager<DataManager>
         EventBus.Shop.CurrencyUpdated(currencyType, currencyArg.Amount);
         ServiceLocator.Get<PersistenceService>().Save(playerData);
     }
+
+    private void WheelOfFortuneSpinRequested(Action<bool> canSpin)
+    {
+        // Validate currency type of Wheel of fortune
+        var wofCurrencyArg = playerData?.WheelOfFortuneCurrencyArg ?? null;
+        if(wofCurrencyArg == null)
+        {
+            Debug.LogError($"WheelOfFortuneCurrencyArg is null for type: {wofCurrencyArg.Type}");
+            return;
+        }
+
+        var currencyArg = GetCurrencyArg(wofCurrencyArg.Type);
+        if (currencyArg == null)
+        {
+            Debug.LogError($"CurrencyArg is null for WheelOfFortuneCurrencyArg type: {currencyArg.Type}");
+            return;
+        }
+
+        // Check credit
+        var creditAmount = currencyArg.Amount;
+        var spinCost = playerData.WheelOfFortuneCurrencyArg.Amount;
+        if (creditAmount < spinCost)
+        {
+            Debug.Log($"CreditAmount :{creditAmount} < SpendRequestAmount : {spinCost}. Transaction failed");
+            return;
+        }
+
+        // Process Transaction
+        currencyArg.Amount -= spinCost;
+        
+        // Fire events
+        EventBus.Shop.CurrencyUpdated(currencyArg.Type, currencyArg.Amount);
+        ServiceLocator.Get<PersistenceService>().Save(playerData);
+        canSpin?.Invoke(true);
+    }
+
+    private void WheelOfFortuneSpinCompleted(long spinRewardAmount)
+    {
+        // Validate currency type of Wheel of fortune
+        var wofCurrencyArg = playerData?.WheelOfFortuneCurrencyArg ?? null;
+        if (wofCurrencyArg == null)
+        {
+            Debug.LogError($"WheelOfFortuneCurrencyArg is null for type: {wofCurrencyArg.Type}");
+            return;
+        }
+
+        // Add reward amount to currency
+        var currencyArg = GetCurrencyArg(wofCurrencyArg.Type);
+        if (currencyArg == null)
+        {
+            Debug.LogError($"CurrencyArg is null for type: {currencyArg.Type}");
+            return;
+        }
+        currencyArg.Amount += spinRewardAmount;
+
+        // Fire events
+        EventBus.Shop.CurrencyUpdated(currencyArg.Type, currencyArg.Amount);
+        ServiceLocator.Get<PersistenceService>().Save(playerData);
+    }
+
 }

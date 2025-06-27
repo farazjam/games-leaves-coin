@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,7 @@ public class LootboxRewardItem : MonoBehaviour
     [SerializeField] private Button button;
     private LootboxRewardItemArg lootboxRewardItemArg;
 
-    public void Init(LootboxRewardItemArg lootboxRewardItemArg)
+    public virtual void Init(LootboxRewardItemArg lootboxRewardItemArg)
     {
         AssertUtil.IsNotNull(lootboxRewardItemArg);
         AssertUtil.AreNotEqual(type, LootboxRewardItemType.None);
@@ -17,6 +18,12 @@ public class LootboxRewardItem : MonoBehaviour
         AssertUtil.IsNotNull(button);
 
         this.lootboxRewardItemArg = lootboxRewardItemArg;
-        button.onClick.AddListener(() => Debug.Log($"LootboxRewardItem Type: {lootboxRewardItemArg.Type}"));
+        button.onClick.AddListener(() => 
+        { 
+            Debug.Log($"LootboxRewardItem Type: {lootboxRewardItemArg.Type}");
+            lootboxRewardItemArg.ButtonPressedCallback?.Invoke();
+        });
     }
 }
+
+

@@ -28,6 +28,18 @@ public static class EventBus
         public static void RequestDailyReward(CurrencyType currencyType, Action callback) => OnDailyRewardRequested?.Invoke(currencyType, callback);
         public static void CurrencyUpdated(CurrencyType currencyType, long amount) => OnCurrencyUpdated?.Invoke(currencyType, amount);
         public static void CurrencySpendRequested(CurrencyType currencyType, long amount) => OnCurrencySpendRequested?.Invoke(currencyType, amount);
+
+
+        public static class WheelOfFortune
+        {
+            public static event Action OnOpenned;
+            public static event Action<Action<bool>> OnSpinRequested;
+            public static event Action<long> OnSpinCompleted;
+
+            public static void Open() => OnOpenned?.Invoke();
+            public static void SpinRequest(Action<bool> canSpin) => OnSpinRequested?.Invoke(canSpin);
+            public static void CompleteSpin(long amount) => OnSpinCompleted?.Invoke(amount);
+        }
     }
 
 }

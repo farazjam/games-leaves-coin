@@ -5,29 +5,32 @@ using UnityEngine;
 
 public class ConfigManager : LoadableManager<ConfigManager>
 {
-    [SerializeField] private CurrencyConfig currencyConfig;
-    [SerializeField] private DailyRewardConfig dailyRewardConfig;
-    [SerializeField] private SpriteConfig spriteConfig;
+    [SerializeField] private Config config;
     private PlayerData playerData;
 
-    public CurrencyConfig CurrencyConfig => currencyConfig;
-    public DailyRewardConfig DailyRewardConfig => dailyRewardConfig;
-    public SpriteConfig SpriteConfig => spriteConfig;
+    public CurrencyConfig CurrencyConfig => config.currencyConfig;
+    public DailyRewardConfig DailyRewardConfig => config.dailyRewardConfig;
+    public SpriteConfig SpriteConfig => config.spriteConfig;
+    public WheelOfFortuneConfig WheelOfFortuneConfig => config.wheelOfFortuneConfig;
     public PlayerData PlayerData => playerData.Clone();
 
     protected override IEnumerator InitRoutine()
     {
-        AssertUtil.IsNotNull(currencyConfig);
-        AssertUtil.IsNotNull(dailyRewardConfig);
-        AssertUtil.IsNotNull(spriteConfig);
+        AssertUtil.IsNotNull(config);
+        AssertUtil.IsNotNull(config.currencyConfig);
+        AssertUtil.IsNotNull(config.dailyRewardConfig);
+        AssertUtil.IsNotNull(config.spriteConfig);
+        AssertUtil.IsNotNull(config.wheelOfFortuneConfig);
 
-        yield return spriteConfig.LoadConfigFileAsync();
-        yield return currencyConfig.LoadConfigFileAsync();
-        yield return dailyRewardConfig.LoadConfigFileAsync();
+        yield return config.spriteConfig.LoadConfigFileAsync();
+        yield return config.currencyConfig.LoadConfigFileAsync();
+        yield return config.dailyRewardConfig.LoadConfigFileAsync();
+        yield return config.wheelOfFortuneConfig.LoadConfigFileAsync();
 
         playerData = new(
-            currencyArgs: currencyConfig.CurrencyArgsDict.Values.ToList(),
-            currencyArgDailyRewards: dailyRewardConfig.CurrencyArgDailyRewardsDict.Values.ToList()
+            currencyArgs: config.currencyConfig.CurrencyArgsDict.Values.ToList(),
+            currencyArgDailyRewards: config.dailyRewardConfig.CurrencyArgDailyRewardsDict.Values.ToList(),
+            wheelOfFortuneCurrencyArg: config.wheelOfFortuneConfig.CurrencyArg
         );
     }
 }

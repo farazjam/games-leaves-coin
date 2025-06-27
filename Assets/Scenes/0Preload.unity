@@ -431,9 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a71c685cc69c4d5418a52e049c0a26ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currencyConfig: {fileID: 11400000, guid: f4ab8c233494e504cbb36f0bc17f5533, type: 2}
-  dailyRewardConfig: {fileID: 11400000, guid: 930c03a532d1b5b46ab1d11524d4b680, type: 2}
-  spriteConfig: {fileID: 11400000, guid: 207704d852c859d4e81863ddc0d4d99b, type: 2}
+  config: {fileID: 11400000, guid: c0f8053a7f3ee3249b1a69385d6d7d11, type: 2}
 --- !u!1 &1440363504
 GameObject:
   m_ObjectHideFlags: 0

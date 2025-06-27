@@ -10,16 +10,17 @@ public class PlayerData
 {
     [SerializeField] private List<CurrencyArg> currencyArgs = new();
     [SerializeField] private List<CurrencyArgDailyReward> currencyArgDailyRewards = new();
+    [SerializeField] private CurrencyArg wheelOfFortuneCurrencyArg = new();
 
     public Dictionary<CurrencyType, CurrencyArg> CurrencyArgs => currencyArgs.ToDictionary(currencyArg => currencyArg.Type, currencyArgValue => currencyArgValue);
     public Dictionary<CurrencyType, CurrencyArgDailyReward> CurrencyArgDailyRewards => currencyArgDailyRewards.ToDictionary(currencyRewardArg => currencyRewardArg.Type, currencyRewardArgValue => currencyRewardArgValue);
-
+    public CurrencyArg WheelOfFortuneCurrencyArg => wheelOfFortuneCurrencyArg;
 
     public PlayerData()
     {
     }
 
-    public PlayerData(List<CurrencyArg> currencyArgs, List<CurrencyArgDailyReward> currencyArgDailyRewards)
+    public PlayerData(List<CurrencyArg> currencyArgs, List<CurrencyArgDailyReward> currencyArgDailyRewards, CurrencyArg wheelOfFortuneCurrencyArg)
     {
         if (currencyArgs != null)
         {
@@ -36,6 +37,8 @@ public class PlayerData
                 this.currencyArgDailyRewards.Add((CurrencyArgDailyReward)reward.Clone());
             }
         }
+
+        this.wheelOfFortuneCurrencyArg = wheelOfFortuneCurrencyArg.Clone();
     }
 
     public PlayerData Clone()
@@ -51,6 +54,8 @@ public class PlayerData
         {
             copy.currencyArgDailyRewards.Add((CurrencyArgDailyReward)reward.Clone());
         }
+
+        copy.wheelOfFortuneCurrencyArg = this.wheelOfFortuneCurrencyArg.Clone();
 
         return copy;
     }
